@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context="ui.fragments.FilterFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ui.helpers.AutofitRecyclerView
+            android:id="@+id/filter.results_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"
+            android:clipToPadding="false"
+            android:columnWidth="@dimen/movie_item_width"
+            android:paddingTop="64dp" />
+
+        <com.mypopsy.widget.FloatingSearchView
+            android:id="@+id/filter.search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#90000000"
+            android:hint="@string/searchHint"
+            android:padding="8dp"
+            app:fsv_menu="@menu/filter_menu"
+            app:theme="@style/CustomFloatingSearchViewTheme" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/filter.loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

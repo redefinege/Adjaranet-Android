@@ -1,0 +1,94 @@
+<resources>
+
+    <style name="AppTheme" parent="BaseTheme" />
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textAppearanceSearchResultTitle">
+            @style/textAppearanceSearchResultTitle
+        </item>
+        <item name="android:textAppearanceSearchResultSubtitle">
+            @style/textAppearanceSearchResultSubTitle
+        </item>
+    </style>
+
+    <style name="SectionTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/colorTextGray</item>
+    </style>
+
+    <style name="SectionMovieTitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/colorTextDark</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+
+    <style name="MovieTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextDark</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">marquee</item>
+    </style>
+
+    <style name="MovieDuration">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="MovieEpisodeInfo">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+        <item name="android:gravity">left|start</item>
+        <item name="android:layout_marginLeft">4dp</item>
+    </style>
+
+    <style name="MovieDescription">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorTextGray</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="MovieViewCount">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorTextGray</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="BottomBarText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+    </style>
+
+    <style name="CustomFloatingSearchViewTheme" parent="AppTheme">
+        <item name="editTextStyle">@style/searchViewEditTextStyle</item>
+        <item name="android:divider">#c9c9c9</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="colorControlNormal">#696969</item>
+    </style>
+
+    <style name="searchViewEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:imeOptions">actionSearch</item>
+    </style>
+
+    <style name="textAppearanceSearchResultTitle" parent="TextAppearance.AppCompat.SearchResult.Title">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:attr/textColorLink</item>
+    </style>
+
+    <style name="textAppearanceSearchResultSubTitle" parent="TextAppearance.AppCompat.SearchResult.Subtitle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+</resources>

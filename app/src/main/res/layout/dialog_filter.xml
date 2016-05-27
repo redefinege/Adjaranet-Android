@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <!-- Year -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/year"
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/dialog_title" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                    android:id="@+id/filter.dialog.yearFrom"
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/dialog_entry"
+                    app:met_floatingLabel="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="4dp"
+                    android:text="@string/yearFrom"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/dialog_entry" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true">
+
+                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                    android:id="@+id/filter.dialog.yearTo"
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/dialog_entry"
+                    app:met_floatingLabel="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="4dp"
+                    android:text="@string/yearTo"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="@dimen/dialog_entry" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- Language -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/language"
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/dialog_title" />
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/filter.dialog.language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/dialog_entry"
+            app:met_floatingLabel="normal" />
+
+        <!-- Country -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/country"
+            android:textColor="@color/colorTextGray"
+            android:textSize="@dimen/dialog_title" />
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/filter.dialog.country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/dialog_entry"
+            app:met_floatingLabel="normal" />
+
+    </LinearLayout>
+
+</ScrollView>

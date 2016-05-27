@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movieview.drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/movieview.coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        tools:context="ui.activities.MovieViewActivity">
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+                android:id="@+id/movieview.video_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                app:layout_aspectRatio="178%" />
+
+            <ScrollView
+                android:id="@+id/movieview.info_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/movieview.video_view">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ui.helpers.CustomNetworkImageView
+                            android:id="@+id/movieview.poster"
+                            android:layout_width="@dimen/poster_width"
+                            android:layout_height="@dimen/poster_height"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:transitionName="@string/transition_movie" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@id/movieview.poster"
+                            android:layout_toRightOf="@id/movieview.poster"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/movieview.title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:ellipsize="end"
+                                android:maxLines="3"
+                                android:textColor="@color/colorTextDark"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/movieview.info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:textColor="@color/colorTextGray"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/movieview.views"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:textColor="@color/colorTextGray"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <TextView
+                        android:id="@+id/movieview.description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxLines="10"
+                        android:textColor="@color/colorTextDark"
+                        android:textSize="16sp" />
+
+                    <include layout="@layout/horizontal_separator" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include layout="@layout/section_layout" />
+
+                        <RelativeLayout
+                            android:id="@+id/movieview.loading"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </android.support.percent.PercentRelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/colorBackground"
+        android:orientation="vertical">
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/movieview.season.select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@color/colorTextDark"
+            android:textSize="@dimen/dialog_title"
+            app:met_floatingLabel="normal" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/movieview.episode.list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

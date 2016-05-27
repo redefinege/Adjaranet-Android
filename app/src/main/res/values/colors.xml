@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196f3</color>
+    <color name="colorPrimaryDark">#1976d2</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="materialGreen">#4CAF50</color>
+    <color name="materialRed">#F44336</color>
+
+    <color name="colorButtonPressed">#E0E0E0</color>
+    <color name="colorButtonFocused">#F5F5F5</color>
+
+    <color name="colorBackground">#ffffff</color>
+    <color name="colorDarkGrey">#ffff00</color>
+
+    <color name="colorTextLight">#ffffff</color>
+    <color name="colorTextDark">#000000</color>
+    <color name="colorTextGray">#80000000</color>
+
+    <color name="colorPlaybackSettingsBG">#d0ffffff</color>
+</resources>

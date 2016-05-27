@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name" translatable="false">Adjaranet Movies</string>
+    <string name="placeholder" translatable="false">Placeholder text</string>
+    <string name="transition_movie" translatable="false">transition_movie</string>
+    <string name="description" translatable="false">Description</string>
+
+    <string name="movies">ფილმები</string>
+    <string name="series">სერიალები</string>
+    <string name="addToFavorites">Add to favorite</string>
+    <string name="removeFromFavorites">Remove from favorite</string>
+    <string name="retry">Retry</string>
+    <string name="movieInfo">%1$s  %2$s საათი</string>
+    <string name="viewCount">%1$s ნახვა</string>
+    <string name="seasonInfo">სეზონი: %1$s</string>
+    <string name="episodeInfo">ეპიზოდი: %1$s</string>
+    <string name="related">მსგავსი ფილმები</string>
+    <string name="searchHint">ძიება...</string>
+    <string name="filterTitle">გაფილტვრა</string>
+    <string name="filterError">შეცდომა</string>
+    <string name="filterReset">RESET</string>
+    <string name="year">წელი</string>
+    <string name="yearFrom">დან</string>
+    <string name="yearTo">მდე</string>
+    <string name="language">ენა</string>
+    <string name="country">ქვეყანა</string>
+    <string name="season">სეზონი</string>
+
+    <!-- Message texts -->
+    <string name="errorFetchMovieData">Error fetching movie data</string>
+    <string name="notSupportedYet">Not yet supported</string>
+
+    <string-array name="Sections">
+        <item>ქართულად გახმოვანებული</item>
+        <item>ახალი დამატებული</item>
+        <item>პრემიერა</item>
+        <item>TOP სერიალები</item>
+    </string-array>
+
+    <string-array name="LanguageKeys">
+        <item>georgian</item>
+        <item>english</item>
+        <item>russian</item>
+    </string-array>
+    <string-array name="LanguageValues">
+        <item>Georgian</item>
+        <item>English</item>
+        <item>Russian</item>
+    </string-array>
+
+    <string-array name="QualityKeys">
+        <item>300</item>
+        <item>1500</item>
+    </string-array>
+    <string-array name="QualityValues">
+        <item>HQ</item>
+        <item>HD</item>
+    </string-array>
+
+    <string-array name="CountryKeys">
+        <item>ge</item>
+        <item>ru</item>
+        <item>us</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>it</item>
+        <item>in</item>
+        <item>jp</item>
+        <item>kr</item>
+        <item>gb</item>
+    </string-array>
+    <string-array name="CountryValues">
+        <item>საქართველო</item>
+        <item>რუსეთი</item>
+        <item>აშშ</item>
+        <item>საფრანგეთი</item>
+        <item>გერმანია</item>
+        <item>იტალია</item>
+        <item>ინდოეთი</item>
+        <item>იაპონია</item>
+        <item>კორეა</item>
+        <item>დიდი ბრიტანეთი</item>
+    </string-array>
+
+
+</resources>

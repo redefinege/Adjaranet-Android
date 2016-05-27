@@ -1,0 +1,21 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ui.fragments.FavoritesFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/favorite.swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ui.helpers.AutofitRecyclerView
+            android:id="@+id/favorite.movie_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"
+            android:columnWidth="@dimen/movie_item_width" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>
