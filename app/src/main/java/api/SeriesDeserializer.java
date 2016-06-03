@@ -75,7 +75,7 @@ public class SeriesDeserializer implements JsonDeserializer<Series> {
             series.setGenres(genres);
         }
 
-        TreeMap<String, List<Episode>> episodesMap = new TreeMap<>();
+        TreeMap<Integer, List<Episode>> episodesMap = new TreeMap<>();
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             int season;
             try {
@@ -104,7 +104,7 @@ public class SeriesDeserializer implements JsonDeserializer<Series> {
                 episode.setQuality(episodeObject.get(EPISODE__QUALITY).getAsString());
                 episodes.add(episode);
             }
-            episodesMap.put(String.valueOf(season), episodes);
+            episodesMap.put(season, episodes);
         }
         series.setEpisodesMap(episodesMap);
 

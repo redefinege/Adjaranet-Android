@@ -11,7 +11,7 @@ import java.util.TreeMap;
 @SuppressWarnings("unused")
 @Parcel
 public class Series {
-    TreeMap<String, List<Episode>> episodesMap;
+    TreeMap<Integer, List<Episode>> episodesMap;
     List<Actor> casting;
     List<Genre> genres;
     List<Director> directors;
@@ -22,7 +22,7 @@ public class Series {
     }
 
     @Transient
-    public Episode getEpisode(String season, int episode) {
+    public Episode getEpisode(Integer season, int episode) {
         if (!episodesMap.containsKey(season)) {
             return null;
         }
@@ -36,15 +36,15 @@ public class Series {
     }
 
     @Transient
-    public List<String> getSeasonList() {
-        List<String> seasonList = new ArrayList<>();
+    public List<Integer> getSeasonList() {
+        List<Integer> seasonList = new ArrayList<>();
         seasonList.addAll(episodesMap.keySet());
         Collections.sort(seasonList);
 
         return seasonList;
     }
 
-    public TreeMap<String, List<Episode>> getEpisodesMap() {
+    public TreeMap<Integer, List<Episode>> getEpisodesMap() {
         return episodesMap;
     }
 
@@ -68,7 +68,7 @@ public class Series {
         return url;
     }
 
-    public void setEpisodesMap(TreeMap<String, List<Episode>> episodesMap) {
+    public void setEpisodesMap(TreeMap<Integer, List<Episode>> episodesMap) {
         this.episodesMap = episodesMap;
     }
 

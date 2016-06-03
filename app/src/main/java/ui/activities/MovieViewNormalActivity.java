@@ -167,20 +167,21 @@ public class MovieViewNormalActivity extends MovieViewActivity
         }
 
         String seasonPrefix = ResourcesProvider.getSeasonPrefixText();
-        List<String> seasonList = currentSeries.getSeasonList();
+        List<Integer> seasonList = currentSeries.getSeasonList();
+        List<String> seasonListWithPrefix = new ArrayList<>();
         for (int i = 0; i < seasonList.size(); i++) {
-            seasonList.set(i, seasonPrefix + " " + seasonList.get(i));
+            seasonListWithPrefix.add(seasonPrefix + " " + seasonList.get(i));
         }
 
         mSeasonAdapter.clear();
-        mSeasonAdapter.addAll(seasonList);
+        mSeasonAdapter.addAll(seasonListWithPrefix);
         mSeasonSpinner.setAdapter(mSeasonAdapter);
 
-        mSeasonSpinner.setText(seasonList.get(activeMovie.getSeasonAsInt() - 1));
+        mSeasonSpinner.setText(seasonListWithPrefix.get(activeMovie.getSeasonAsInt() - 1));
         mSeasonSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                updateEpisodeList(String.valueOf(i + 1));
+                updateEpisodeList(Integer.valueOf(i + 1));
             }
         });
 
@@ -196,10 +197,10 @@ public class MovieViewNormalActivity extends MovieViewActivity
     }
 
     private void updateEpisodeList() {
-        updateEpisodeList(activeMovie.getSeason());
+        updateEpisodeList(activeMovie.getSeasonAsInt());
     }
 
-    private void updateEpisodeList(String season) {
+    private void updateEpisodeList(Integer season) {
         int currentEpisode = -1;
         if (season.equals(activeMovie.getSeason())) {
             currentEpisode = activeMovie.getEpisodeAsInt() - 1;
