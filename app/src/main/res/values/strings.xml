@@ -49,11 +49,13 @@
 
     <string-array name="QualityKeys">
         <item>300</item>
+        <item>800</item>
         <item>1500</item>
     </string-array>
     <string-array name="QualityValues">
-        <item>HQ</item>
-        <item>HD</item>
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
     </string-array>
 
     <string-array name="CountryKeys">
