@@ -1,7 +1,9 @@
 package ui.activities;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -72,12 +75,24 @@ public class MovieViewNormalActivity extends MovieViewActivity
         TextView views = (TextView) findViewById(R.id.movieview_views);
         TextView description = (TextView) findViewById(R.id.movieview_description);
         TextView relatedTitle = (TextView) findViewById(R.id.section_title);
+        Button downloadButton = (Button) findViewById(R.id.movieview_download);
+        Button openButton = (Button) findViewById(R.id.movieview_open_player);
         RecyclerView relatedList = (RecyclerView) findViewById(R.id.section_recycler_view);
         RelativeLayout loadingContainer = (RelativeLayout) findViewById(R.id.movieview_loading);
 
         mSeasonSpinner = (MaterialBetterSpinner) findViewById(R.id.movieview_season_select);
         mEpisodeList = (RecyclerView) findViewById(R.id.movieview_episode_list);
         configureSeriesDrawer();
+
+        // Handle button clicks
+        openButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(activeMovie.getPlaybackUrl(currentLanguageIndex, currentQualityIndex)), "video/*");
+                startActivity(Intent.createChooser(intent, getResources().getString(R.string.videoPlayerChooserMessage)));
+            }
+        });
 
         // Build loading layout
         mLoadingLayout = new LoadingLayout(loadingContainer, new LoadingLayout.OnLoadingLayoutInteraction() {

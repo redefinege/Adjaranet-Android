@@ -24,10 +24,13 @@
     <string name="language">ენა</string>
     <string name="country">ქვეყანა</string>
     <string name="season">სეზონი</string>
+    <string name="open">გახსნა</string>
+    <string name="download">გადმოწერა</string>
 
     <!-- Message texts -->
     <string name="errorFetchMovieData">Error fetching movie data</string>
     <string name="notSupportedYet">Not yet supported</string>
+    <string name="videoPlayerChooserMessage">აირჩიეთ ვიდეო დამკვრელი</string>
 
     <string-array name="Sections">
         <item>ქართულად გახმოვანებული</item>
