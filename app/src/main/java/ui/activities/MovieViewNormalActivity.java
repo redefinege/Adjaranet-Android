@@ -1,11 +1,14 @@
 package ui.activities;
 
 import android.annotation.TargetApi;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -85,11 +88,30 @@ public class MovieViewNormalActivity extends MovieViewActivity
         configureSeriesDrawer();
 
         // Handle button clicks
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                Uri uri = activeMovie.getPlaybackUri(currentLanguageIndex, currentQualityIndex);
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setTitle(getResources().getString(R.string.app_name))
+                        .setDescription(activeMovie.getTitleEn())
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                                uri.getLastPathSegment())
+                        .setVisibleInDownloadsUi(true)
+                        .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE
+                                | DownloadManager.Request.NETWORK_WIFI);
+
+                downloadManager.enqueue(request);
+            }
+        });
+
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(activeMovie.getPlaybackUrl(currentLanguageIndex, currentQualityIndex)), "video/*");
+                Uri uri = activeMovie.getPlaybackUri(currentLanguageIndex, currentQualityIndex);
+                intent.setDataAndType(uri, "video/*");
                 startActivity(Intent.createChooser(intent, getResources().getString(R.string.videoPlayerChooserMessage)));
             }
         });

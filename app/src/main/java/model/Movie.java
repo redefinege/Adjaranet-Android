@@ -1,5 +1,7 @@
 package model;
 
+import android.net.Uri;
+
 import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
 import org.parceler.Transient;
@@ -214,6 +216,11 @@ public class Movie extends RealmObject {
     public void setDirectors(List<Director> directors) {
         this.directors = new RealmList<>();
         this.directors.addAll(directors);
+    }
+
+    @Transient
+    public Uri getPlaybackUri(int langIndex, int qualityIndex) {
+        return Uri.parse(getPlaybackUrl(langIndex, qualityIndex));
     }
 
     @Transient

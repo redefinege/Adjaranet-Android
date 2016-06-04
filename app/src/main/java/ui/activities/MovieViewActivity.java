@@ -149,8 +149,8 @@ public abstract class MovieViewActivity extends AppCompatActivity implements OnP
         } else {
             currentPosition = 0;
         }
-        Uri url = Uri.parse(activeMovie.getPlaybackUrl(currentLanguageIndex, currentQualityIndex));
-        mVideoView.setVideoURI(url);
+        Uri uri = activeMovie.getPlaybackUri(currentLanguageIndex, currentQualityIndex);
+        mVideoView.setVideoURI(uri);
     }
 
     protected void updatePlayback() {
