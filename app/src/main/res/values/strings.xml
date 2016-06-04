@@ -30,7 +30,7 @@
     <!-- Message texts -->
     <string name="errorFetchMovieData">Error fetching movie data</string>
     <string name="notSupportedYet">Not yet supported</string>
-    <string name="videoPlayerChooserMessage">აირჩიეთ ვიდეო დამკვრელი</string>w
+    <string name="videoPlayerChooserMessage">აირჩიეთ ვიდეო დამკვრელი</string>
 
     <string-array name="Sections">
         <item>ქართულად გახმოვანებული</item>
