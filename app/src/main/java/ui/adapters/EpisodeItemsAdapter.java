@@ -9,23 +9,22 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ge.redefine.adjaranet.R;
 import model.Episode;
+import model.EpisodeList;
 
 public class EpisodeItemsAdapter extends RecyclerView.Adapter<EpisodeItemsAdapter.EpisodeItemsVH> {
     private Context mContext;
     private OnEpisodeClickListener mListener;
-    private List<Episode> mDataset;
-    private int mCurrentEpisode = -1;
+    private EpisodeList mDataset;
+    private Integer mCurrentEpisode = -1;
 
     public EpisodeItemsAdapter(Context context, OnEpisodeClickListener listener) {
         mContext = context;
         mListener = listener;
     }
 
-    public void update(List<Episode> dataset, int currentEpisode) {
+    public void update(EpisodeList dataset, Integer currentEpisode) {
         mDataset = dataset;
         mCurrentEpisode = currentEpisode;
         notifyDataSetChanged();
@@ -41,9 +40,10 @@ public class EpisodeItemsAdapter extends RecyclerView.Adapter<EpisodeItemsAdapte
 
     @Override
     public void onBindViewHolder(EpisodeItemsVH holder, int position) {
-        holder.episodeNumber.setText(String.valueOf(position + 1));
-        holder.episodeTitle.setText(mDataset.get(position).getNameEn());
-        if (position == mCurrentEpisode) {
+        Episode episode = mDataset.getEpisodeByIndex(position);
+        holder.episodeNumber.setText(String.valueOf(mDataset.getEpisodeNumberByIndex(position)));
+        holder.episodeTitle.setText(episode.getNameEn());
+        if (mCurrentEpisode.equals(mDataset.getEpisodeNumberByIndex(position))) {
             holder.setSelected();
         } else {
             holder.setNormal();
@@ -52,7 +52,7 @@ public class EpisodeItemsAdapter extends RecyclerView.Adapter<EpisodeItemsAdapte
 
     @Override
     public int getItemCount() {
-        return mDataset == null ? 0 : mDataset.size();
+        return mDataset == null ? 0 : mDataset.getSize();
     }
 
     public class EpisodeItemsVH extends RecyclerView.ViewHolder {

@@ -134,10 +134,15 @@ public class MainActivity extends AppCompatActivity implements OnMovieInteractio
                         @Override
                         public void onResponse(Series response) {
                             dialog.dismiss();
-                            Episode episode = response.getEpisode(movie.getSeasonAsInt(), movie.getEpisodeAsInt());
+                            Episode episode = response.getEpisode(movie.getSeasonAsInteger(), movie.getEpisodeAsInteger());
                             if (episode == null) {
-                                errorListener.onErrorResponse(null);
-                                return;
+                                episode = response.getEpisode(1, 1);
+                                if (episode == null) {
+                                    errorListener.onErrorResponse(null);
+                                    return;
+                                }
+                                movie.setSeason("1");
+                                movie.setEpisode("1");
                             }
 
                             movie.setLanguages(episode.getLanguage());

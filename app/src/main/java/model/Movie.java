@@ -107,9 +107,9 @@ public class Movie extends RealmObject {
 
     public String getSeason() { return season; }
     @Transient
-    public int getSeasonAsInt() {
+    public Integer getSeasonAsInteger() {
         try {
-            return Integer.parseInt(season);
+            return Integer.valueOf(season);
         } catch (NumberFormatException ignored) {
         }
         return -1;
@@ -117,9 +117,10 @@ public class Movie extends RealmObject {
     public void setSeason(String season) { this.season = season; }
 
     public String getEpisode() { return episode; }
-    public int getEpisodeAsInt() {
+    @Transient
+    public Integer getEpisodeAsInteger() {
         try {
-            return Integer.parseInt(episode);
+            return Integer.valueOf(episode);
         } catch (NumberFormatException ignored) {
         }
         return -1;
@@ -234,8 +235,8 @@ public class Movie extends RealmObject {
 
         String seriesString = "";
         if (isEpisode()) {
-            String seasonString = String.format(Locale.US, "%02d", getSeasonAsInt());
-            String episodeString = String.format(Locale.US, "%02d", getEpisodeAsInt());
+            String seasonString = String.format(Locale.US, "%02d", getSeasonAsInteger());
+            String episodeString = String.format(Locale.US, "%02d", getEpisodeAsInteger());
             seriesString = seasonString + "_" + episodeString + "_";
         }
 
@@ -257,8 +258,8 @@ public class Movie extends RealmObject {
 
     @Transient
     public boolean isEpisode() {
-        int episode = getEpisodeAsInt();
-        int season = getSeasonAsInt();
+        int episode = getEpisodeAsInteger();
+        int season = getSeasonAsInteger();
 
         return episode > 0 && season > 0;
     }

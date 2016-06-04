@@ -4,14 +4,13 @@ import org.parceler.Parcel;
 import org.parceler.Transient;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
 @SuppressWarnings("unused")
 @Parcel
 public class Series {
-    TreeMap<Integer, List<Episode>> episodesMap;
+    TreeMap<Integer, EpisodeList> episodesMap;
     List<Actor> casting;
     List<Genre> genres;
     List<Director> directors;
@@ -22,29 +21,33 @@ public class Series {
     }
 
     @Transient
-    public Episode getEpisode(Integer season, int episode) {
+    public Episode getEpisode(Integer season, Integer episode) {
         if (!episodesMap.containsKey(season)) {
             return null;
         }
 
-        List<Episode> episodeList = episodesMap.get(season);
-        if (episode > episodeList.size()) {
+        EpisodeList episodeList = episodesMap.get(season);
+        if (!episodeList.getEpisodeList().containsKey(episode)) {
             return null;
         }
 
-        return episodeList.get(episode - 1);
+        return episodeList.getEpisodeList().get(episode);
     }
 
     @Transient
     public List<Integer> getSeasonList() {
-        List<Integer> seasonList = new ArrayList<>();
-        seasonList.addAll(episodesMap.keySet());
-        Collections.sort(seasonList);
+        List<Integer> seasonList = new ArrayList<>(episodesMap.keySet());
 
         return seasonList;
     }
 
-    public TreeMap<Integer, List<Episode>> getEpisodesMap() {
+    @Transient
+    public Integer getSeasonNumberByIndex(int index) {
+        List<Integer> seasonList = new ArrayList<>(episodesMap.keySet());
+        return seasonList.get(index);
+    }
+
+    public TreeMap<Integer, EpisodeList> getEpisodesMap() {
         return episodesMap;
     }
 
@@ -68,7 +71,7 @@ public class Series {
         return url;
     }
 
-    public void setEpisodesMap(TreeMap<Integer, List<Episode>> episodesMap) {
+    public void setEpisodesMap(TreeMap<Integer, EpisodeList> episodesMap) {
         this.episodesMap = episodesMap;
     }
 

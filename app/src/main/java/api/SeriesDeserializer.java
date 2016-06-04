@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import model.Actor;
 import model.Director;
 import model.Episode;
+import model.EpisodeList;
 import model.Genre;
 import model.Series;
 
@@ -75,16 +76,12 @@ public class SeriesDeserializer implements JsonDeserializer<Series> {
             series.setGenres(genres);
         }
 
-        TreeMap<Integer, List<Episode>> episodesMap = new TreeMap<>();
+        TreeMap<Integer, EpisodeList> episodesMap = new TreeMap<>();
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            int season;
+            Integer season;
             try {
-                season = Integer.parseInt(entry.getKey());
+                season = Integer.valueOf(entry.getKey());
             } catch (NumberFormatException ignored) {
-                continue;
-            }
-
-            if (season <= 0) {
                 continue;
             }
 
@@ -92,9 +89,16 @@ public class SeriesDeserializer implements JsonDeserializer<Series> {
                 continue;
             }
 
-            List<Episode> episodes = new ArrayList<>();
+            TreeMap<Integer, Episode> episodeMap = new TreeMap<>();
             JsonObject seasonObject = entry.getValue().getAsJsonObject();
             for (Map.Entry<String, JsonElement> episodeEntry : seasonObject.entrySet()) {
+                Integer episodeIndex;
+                try {
+                    episodeIndex = Integer.valueOf(episodeEntry.getKey());
+                } catch (NumberFormatException ignored) {
+                    continue;
+                }
+
                 Episode episode = new Episode();
                 JsonObject episodeObject = episodeEntry.getValue().getAsJsonObject();
                 episode.setId(episodeEntry.getKey());
@@ -102,9 +106,11 @@ public class SeriesDeserializer implements JsonDeserializer<Series> {
                 episode.setNameKa(episodeObject.get(EPISODE__NAME_KA).getAsString());
                 episode.setLanguage(episodeObject.get(EPISODE__LANGUAGE).getAsString());
                 episode.setQuality(episodeObject.get(EPISODE__QUALITY).getAsString());
-                episodes.add(episode);
+                episodeMap.put(episodeIndex, episode);
             }
-            episodesMap.put(season, episodes);
+            EpisodeList episodeList = new EpisodeList();
+            episodeList.setEpisodeList(episodeMap);
+            episodesMap.put(season, episodeList);
         }
         series.setEpisodesMap(episodesMap);
 

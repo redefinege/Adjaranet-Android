@@ -42,7 +42,7 @@ import api.AdjaranetAPI;
 import ge.redefine.adjaranet.R;
 import helpers.PreferencesManager;
 import helpers.ResourcesProvider;
-import model.Episode;
+import model.EpisodeList;
 import model.Movie;
 import ui.adapters.EpisodeItemsAdapter;
 import ui.adapters.MovieItemsAdapter;
@@ -62,6 +62,7 @@ public class MovieViewNormalActivity extends MovieViewActivity
     private ArrayAdapter<String> mSeasonAdapter;
     private RecyclerView mEpisodeList;
     private EpisodeItemsAdapter mEpisodeItemsAdapter;
+    private Integer mSelectedSeason = 1;
 
     protected void init() {
         setContentView(R.layout.activity_movie_view);
@@ -206,44 +207,48 @@ public class MovieViewNormalActivity extends MovieViewActivity
         String seasonPrefix = ResourcesProvider.getSeasonPrefixText();
         List<Integer> seasonList = currentSeries.getSeasonList();
         List<String> seasonListWithPrefix = new ArrayList<>();
-        for (int i = 0; i < seasonList.size(); i++) {
-            seasonListWithPrefix.add(seasonPrefix + " " + seasonList.get(i));
+        for (Integer seasonNumber : seasonList) {
+            seasonListWithPrefix.add(seasonPrefix + " " + String.valueOf(seasonNumber));
         }
 
         mSeasonAdapter.clear();
         mSeasonAdapter.addAll(seasonListWithPrefix);
         mSeasonSpinner.setAdapter(mSeasonAdapter);
 
-        mSeasonSpinner.setText(seasonListWithPrefix.get(activeMovie.getSeasonAsInt() - 1));
+        mSeasonSpinner.setText(seasonListWithPrefix.get(activeMovie.getSeasonAsInteger() - 1));
         mSeasonSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                updateEpisodeList(Integer.valueOf(i + 1));
+                mSelectedSeason = currentSeries.getSeasonNumberByIndex(i);
+                updateEpisodeList();
             }
         });
 
-        updateEpisodeList();
+        updateEpisodeListForCurrentSeason();
     }
 
     @Override
     public void onEpisodeClicked(int position) {
         mDrawerLayout.closeDrawer(GravityCompat.END);
-        activeMovie.setEpisode(String.valueOf(position + 1));
+        EpisodeList episodeList = currentSeries.getEpisodesMap().get(mSelectedSeason);
+        activeMovie.setSeason(String.valueOf(mSelectedSeason));
+        activeMovie.setEpisode(String.valueOf(episodeList.getEpisodeNumberByIndex(position)));
         updatePlayback(false);
+        updateEpisodeListForCurrentSeason();
+    }
+
+    private void updateEpisodeListForCurrentSeason() {
+        mSelectedSeason = activeMovie.getSeasonAsInteger();
         updateEpisodeList();
     }
 
     private void updateEpisodeList() {
-        updateEpisodeList(activeMovie.getSeasonAsInt());
-    }
-
-    private void updateEpisodeList(Integer season) {
-        int currentEpisode = -1;
-        if (season.equals(activeMovie.getSeason())) {
-            currentEpisode = activeMovie.getEpisodeAsInt() - 1;
+        Integer currentEpisode = -1;
+        if (mSelectedSeason.equals(activeMovie.getSeasonAsInteger())) {
+            currentEpisode = activeMovie.getEpisodeAsInteger();
         }
 
-        List<Episode> episodeList = currentSeries.getEpisodesMap().get(season);
+        EpisodeList episodeList = currentSeries.getEpisodesMap().get(mSelectedSeason);
         mEpisodeItemsAdapter.update(episodeList, currentEpisode);
     }
 
