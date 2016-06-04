@@ -1,5 +1,6 @@
 package api;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -26,47 +27,36 @@ import java.util.concurrent.CountDownLatch;
 
 import model.Movie;
 import model.Series;
-import network.BitmapLruCache;
 import network.GsonRequest;
 
 @SuppressWarnings("unused")
 public class AdjaranetAPI {
     private static final String URL_BASE = "http://adjaranet.com/";
     private static final String URL_STATIC = "http://static.adjaranet.com/";
-    private static final String URL_CACHED_BASE = URL_BASE + "cache/";
-    private static final String URL_QUICK_SEARCH = URL_BASE + "/Home/quick_search?ajax=1&search={query}";
-    private static final String URL_CACHED_GEORGIAN = URL_CACHED_BASE +
-            "cached_home_geomovies.php?type=geomovies&order=new&period=day&limit=25";
-    private static final String URL_CACHED_PREMIERE = URL_CACHED_BASE +
-            "cached_home_premiere.php?type=premiere&order=new&period=week&limit=25";
-    private static final String URL_CACHED_NEWADDED = URL_CACHED_BASE +
-            "cached_home_movies.php?type=movies&order=new&period=week&limit=25";
-    private static final String URL_CACHED_TOPSERIE = URL_CACHED_BASE +
-            "cached_home_series.php?type=series&order=top&period=week&limit=25";
-    private static final String URL_CACHED_TRAILERS = URL_CACHED_BASE +
-            "cached_home_trailers.php?type=trailers&order=new&period=week&limit=25";
-    private static final String URL_PLAYBACK_INFO = URL_BASE +
-            "req/jsondata/req.php?id={movie_id}&reqId=getLangAndHd";
-    private static final String URL_RELATED = URL_BASE +
-            "Movie/BuildSliderRelated?ajax=1&movie_id={movie_id}&isepisode=0&type=related&order=top&period=day&limit=25";
-    private static final String URL_SERIES_INFO = URL_BASE +
-            "req/jsondata/req.php?id={id}&reqId=getInfo";
+    private static final String URL_QUICK_SEARCH =
+            URL_BASE + "/Home/quick_search?ajax=1&search={query}";
+    private static final String URL_PLAYBACK_INFO =
+            URL_BASE + "req/jsondata/req.php?id={movie_id}&reqId=getLangAndHd";
+    private static final String URL_RELATED =
+            URL_BASE + "Movie/BuildSliderRelated?ajax=1&movie_id={movie_id}&isepisode=0&type=related&order=top&period=day&limit=25";
+    private static final String URL_SERIES_INFO =
+            URL_BASE + "req/jsondata/req.php?id={id}&reqId=getInfo";
 
     private static AdjaranetAPI sInstance;
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-    private AdjaranetAPI(RequestQueue requestQueue) {
+    private AdjaranetAPI(RequestQueue requestQueue, ImageLoader imageLoader) {
         mRequestQueue = requestQueue;
-        mImageLoader = new ImageLoader(mRequestQueue, new BitmapLruCache());
+        mImageLoader = imageLoader;
     }
 
     /**
      * Singleton initializer
      */
-    public static void init(ShouldProvideRequestQueue requestQueueProvider) {
-        sInstance = new AdjaranetAPI(requestQueueProvider.getRequestQueue());
+    public static void init(ShouldProvideVolleyInstance volleyProvider) {
+        sInstance = new AdjaranetAPI(volleyProvider.getRequestQueue(), volleyProvider.getImageLoader());
     }
 
     /**
@@ -128,7 +118,6 @@ public class AdjaranetAPI {
                 lLatch.countDown();
             }
         };
-
 
         final Response.ErrorListener lErrorListener = new Response.ErrorListener() {
             @Override
@@ -291,8 +280,15 @@ public class AdjaranetAPI {
      */
     public GsonRequest getHomeGeorgianMovies(Response.Listener<List<Movie>> listener,
                                              Response.ErrorListener errorListener) {
+        String uri = new CachedDataUriBuilder()
+                .setType(CachedDataUriBuilder.TYPE__GEOMOVIES)
+                .setLimit(25)
+                .orderIsNew()
+                .periodIsDay()
+                .build().toString();
+
         return sendMovieRequest(
-                URL_CACHED_GEORGIAN,
+                uri,
                 listener,
                 errorListener
         );
@@ -303,8 +299,15 @@ public class AdjaranetAPI {
      */
     public GsonRequest getHomeNewMovies(Response.Listener<List<Movie>> listener,
                                         Response.ErrorListener errorListener) {
+        String uri = new CachedDataUriBuilder()
+                .setType(CachedDataUriBuilder.TYPE__MOVIES)
+                .setLimit(25)
+                .orderIsNew()
+                .periodIsWeek()
+                .build().toString();
+
         return sendMovieRequest(
-                URL_CACHED_NEWADDED,
+                uri,
                 listener,
                 errorListener
         );
@@ -315,8 +318,15 @@ public class AdjaranetAPI {
      */
     public GsonRequest getHomePremiereMovies(Response.Listener<List<Movie>> listener,
                                              Response.ErrorListener errorListener) {
+        String uri = new CachedDataUriBuilder()
+                .setType(CachedDataUriBuilder.TYPE__PREMIERE)
+                .setLimit(25)
+                .orderIsNew()
+                .periodIsWeek()
+                .build().toString();
+
         return sendMovieRequest(
-                URL_CACHED_PREMIERE,
+                uri,
                 listener,
                 errorListener
         );
@@ -327,20 +337,15 @@ public class AdjaranetAPI {
      */
     public GsonRequest getHomeTopSeries(Response.Listener<List<Movie>> listener,
                                         Response.ErrorListener errorListener) {
-        return sendMovieRequest(
-                URL_CACHED_TOPSERIE,
-                listener,
-                errorListener
-        );
-    }
+        String uri = new CachedDataUriBuilder()
+                .setType(CachedDataUriBuilder.TYPE__SERIES)
+                .setLimit(25)
+                .orderIsTop()
+                .periodIsWeek()
+                .build().toString();
 
-    /**
-     * Get new trailers for Home screen
-     */
-    public GsonRequest getHomeTrailers(Response.Listener<List<Movie>> listener,
-                                       Response.ErrorListener errorListener) {
         return sendMovieRequest(
-                URL_CACHED_TRAILERS,
+                uri,
                 listener,
                 errorListener
         );
@@ -413,6 +418,69 @@ public class AdjaranetAPI {
             super();
 
             setSearchUrl(URL_BASE + "Search/SearchResults");
+        }
+    }
+
+    public static class CachedDataUriBuilder {
+        public static final String TYPE__GEOMOVIES = "geomovies";
+        public static final String TYPE__PREMIERE = "premiere";
+        public static final String TYPE__MOVIES = "movies";
+        public static final String TYPE__SERIES = "series";
+        private static final String ORDER__NEW = "new";
+        private static final String ORDER__TOP = "top";
+        private static final String PERIOD__DAY = "day";
+        private static final String PERIOD__WEEK = "week";
+
+        private int dataLimit = 25;
+        private String dataType = TYPE__GEOMOVIES;
+        private String dataOrder = ORDER__NEW;
+        private String dataPeriod = PERIOD__WEEK;
+
+        public CachedDataUriBuilder setLimit(int limit) {
+            this.dataLimit = limit;
+            return this;
+        }
+
+        public CachedDataUriBuilder setType(String type) {
+            this.dataType = type;
+            return this;
+        }
+
+        public CachedDataUriBuilder orderIsNew() {
+            this.dataOrder = ORDER__NEW;
+            return this;
+        }
+
+        public CachedDataUriBuilder orderIsTop() {
+            this.dataOrder = ORDER__TOP;
+            return this;
+        }
+
+        public CachedDataUriBuilder periodIsDay() {
+            this.dataPeriod = PERIOD__DAY;
+            return this;
+        }
+
+        public CachedDataUriBuilder periodIsWeek() {
+            this.dataPeriod = PERIOD__WEEK;
+            return this;
+        }
+
+        public Uri build() {
+            String path = "/cache/cached_home_{type}.php";
+            path = path.replace("{type}", dataType);
+
+            Uri uri = new Uri.Builder()
+                    .scheme("http")
+                    .authority("adjaranet.com")
+                    .path(path)
+                    .appendQueryParameter("type", dataType)
+                    .appendQueryParameter("order", dataOrder)
+                    .appendQueryParameter("period", dataPeriod)
+                    .appendQueryParameter("limit", String.valueOf(dataLimit))
+                    .build();
+
+            return uri;
         }
     }
 }

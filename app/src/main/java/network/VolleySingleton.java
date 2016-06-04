@@ -8,9 +8,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-import api.ShouldProvideRequestQueue;
+import api.ShouldProvideVolleyInstance;
 
-public class VolleySingleton implements ShouldProvideRequestQueue {
+public class VolleySingleton implements ShouldProvideVolleyInstance {
     private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
