@@ -37,8 +37,6 @@ import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -65,9 +63,7 @@ public class OkHttp3Stack implements HttpStack {
     public HttpResponse performRequest(com.android.volley.Request<?> request, Map<String, String> additionalHeaders)
             throws IOException, AuthFailureError {
 
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved("accpr.teaches-yoga.com", 3128));
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-                .proxy(proxy);
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         int timeoutMs = request.getTimeoutMs();
 
         clientBuilder.connectTimeout(timeoutMs, TimeUnit.MILLISECONDS);
