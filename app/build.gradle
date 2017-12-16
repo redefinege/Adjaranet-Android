@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "ge.redefine.adjaranet"
@@ -44,8 +43,8 @@ dependencies {
     compile 'biz.kasual:materialnumberpicker:1.2.1'
     compile 'com.github.renaudcerrato:FloatingSearchView:1.0.0'
     compile 'com.github.silvestrpredko:dot-progress-bar:0.1.4@aar'
-    compile 'org.parceler:parceler-api:1.1.4'
-    apt 'org.parceler:parceler:1.1.4'
+    compile 'org.parceler:parceler-api:1.1.9'
+    annotationProcessor 'org.parceler:parceler:1.1.9'
     compile ('com.weiwangcn.betterspinner:library-material:1.1.0') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }

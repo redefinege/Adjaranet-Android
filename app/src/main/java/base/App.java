@@ -5,11 +5,11 @@ import android.app.Application;
 import api.AdjaranetAPI;
 import ge.redefine.adjaranet.R;
 import helpers.PreferencesManager;
+import helpers.ResourcesProvider;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import model.RMHelper;
 import network.VolleySingleton;
-import helpers.ResourcesProvider;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class App extends Application {
@@ -31,7 +31,8 @@ public class App extends Application {
         );
 
         // initialize Realm
-        RealmConfiguration configuration = new RealmConfiguration.Builder(this)
+        Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(configuration);
