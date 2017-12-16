@@ -31,8 +31,8 @@ import network.GsonRequest;
 
 @SuppressWarnings("unused")
 public class AdjaranetAPI {
-    private static final String URL_BASE = "http://adjaranet.com/";
-    private static final String URL_STATIC = "http://static.adjaranet.com/";
+    private static final String URL_BASE = "http://net.adjara.com/";
+    private static final String URL_STATIC = "http://staticnet.adjara.com/";
     private static final String URL_QUICK_SEARCH =
             URL_BASE + "/Home/quick_search?ajax=1&search={query}";
     private static final String URL_PLAYBACK_INFO =
