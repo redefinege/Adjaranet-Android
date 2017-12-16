@@ -36,7 +36,7 @@
         <item>ქართულად გახმოვანებული</item>
         <item>ახალი დამატებული</item>
         <item>პრემიერა</item>
-        <item>TOP სერიალები</item>
+        <!--<item>TOP სერიალები</item>-->
     </string-array>
 
     <string-array name="LanguageKeys">

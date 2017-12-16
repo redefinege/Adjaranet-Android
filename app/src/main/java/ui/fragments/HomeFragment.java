@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import api.AdjaranetAPI;
+import ge.redefine.adjaranet.R;
+import helpers.ResourcesProvider;
+import model.Movie;
 import ui.adapters.OnMovieInteractionListener;
 import ui.adapters.SectionsAdapter;
-import api.AdjaranetAPI;
-import model.Movie;
-import ge.redefine.adjaranet.R;
 import ui.helpers.LoadingLayout;
-import helpers.ResourcesProvider;
 import ui.helpers.SimpleDividerItemDecoration;
 
 public class HomeFragment extends Fragment {
@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 final AdjaranetAPI api = AdjaranetAPI.getInstance();
-                final CountDownLatch updateLatch = new CountDownLatch(4);
+                final CountDownLatch updateLatch = new CountDownLatch(3);
 
                 api.getHomeGeorgianMovies(new Response.Listener<List<Movie>>() {
                     @Override
@@ -153,17 +153,17 @@ public class HomeFragment extends Fragment {
                     }
                 }, null);
 
-                api.getHomeTopSeries(new Response.Listener<List<Movie>>() {
-                    @Override
-                    public void onResponse(List<Movie> response) {
-                        mSectionsAdapter.updateChild(3, response);
-                        updateLatch.countDown();
-                    }
-                }, null);
+//                api.getHomeTopSeries(new Response.Listener<List<Movie>>() {
+//                    @Override
+//                    public void onResponse(List<Movie> response) {
+//                        mSectionsAdapter.updateChild(3, response);
+//                        updateLatch.countDown();
+//                    }
+//                }, null);
 
                 boolean updateSuccess = false;
                 try {
-                    if (updateLatch.await(5L, TimeUnit.SECONDS)) {
+                    if (updateLatch.await(7L, TimeUnit.SECONDS)) {
                         updateSuccess = true;
                     }
                 } catch (InterruptedException ignored) {
