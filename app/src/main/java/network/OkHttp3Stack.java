@@ -53,7 +53,6 @@ import okhttp3.ResponseBody;
  * OkHttp backed {@link com.android.volley.toolbox.HttpStack HttpStack} that does not
  * use okhttp-urlconnection
  */
-@SuppressWarnings("deprecation")
 public class OkHttp3Stack implements HttpStack {
 
     public OkHttp3Stack() {
@@ -122,9 +121,9 @@ public class OkHttp3Stack implements HttpStack {
         switch (request.getMethod()) {
             case Request.Method.DEPRECATED_GET_OR_POST:
                 // Ensure backwards compatibility.  Volley assumes a request with a null body is a GET.
-                byte[] postBody = request.getPostBody();
+                byte[] postBody = request.getBody();
                 if (postBody != null) {
-                    builder.post(RequestBody.create(MediaType.parse(request.getPostBodyContentType()), postBody));
+                    builder.post(RequestBody.create(MediaType.parse(request.getBodyContentType()), postBody));
                 }
                 break;
             case Request.Method.GET:
