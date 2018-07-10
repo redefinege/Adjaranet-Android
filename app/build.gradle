@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 27
 
     defaultConfig {
         applicationId "ge.redefine.adjaranet"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 5
         versionName "1.2.0"
     }
@@ -28,17 +28,17 @@ dependencies {
         transitive = true
     }
     implementation 'com.android.volley:volley:1.0.0'
-    implementation 'com.android.support:appcompat-v7:23.4.0'
-    implementation 'com.android.support:support-v4:23.4.0'
-    implementation 'com.android.support:design:23.4.0'
-    implementation 'com.android.support:recyclerview-v7:23.4.0'
-    implementation 'com.android.support:cardview-v7:23.4.0'
-    implementation 'com.android.support:percent:23.4.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:percent:27.1.1'
     implementation 'com.squareup.okhttp3:okhttp:3.7.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'me.zhanghai.android.materialprogressbar:library:1.1.6'
     implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
-    implementation 'com.devbrackets.android:exomedia:3.0.0-preview1'
+    implementation 'com.devbrackets.android:exomedia:4.2.1'
     implementation 'biz.kasual:materialnumberpicker:1.2.1'
     implementation 'com.github.renaudcerrato:FloatingSearchView:1.0.0'
     implementation 'com.github.silvestrpredko:dot-progress-bar:0.1.4@aar'

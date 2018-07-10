@@ -12,7 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
 import org.parceler.Parcels;
 
@@ -37,9 +37,9 @@ public abstract class MovieViewActivity extends AppCompatActivity implements OnP
     protected Bitmap posterImage;
     protected int currentLanguageIndex = 0;
     protected int currentQualityIndex = 0;
-    protected int currentPosition = 0;
+    protected long currentPosition = 0;
     protected boolean isFullscreen = false;
-    protected EMVideoView mVideoView;
+    protected VideoView mVideoView;
     protected VideoControlsMobile mVideoControls;
 
     protected abstract void init();
@@ -118,7 +118,7 @@ public abstract class MovieViewActivity extends AppCompatActivity implements OnP
         mVideoView.setBackgroundColor(Color.BLACK);
         mVideoView.setOnErrorListener(new OnErrorListener() {
             @Override
-            public boolean onError() {
+            public boolean onError(Exception e) {
                 mVideoControls.setLoading(false);
                 mVideoView.showControls();
                 return true;
