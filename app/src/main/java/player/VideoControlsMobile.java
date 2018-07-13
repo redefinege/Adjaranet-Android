@@ -12,7 +12,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -22,7 +21,11 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devbrackets.android.exomedia.ui.animation.BottomViewHideShowAnimation;
+import com.devbrackets.android.exomedia.ui.animation.TopViewHideShowAnimation;
 import com.devbrackets.android.exomedia.util.TimeFormatUtil;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 import ge.redefine.adjaranet.R;
@@ -30,10 +33,9 @@ import ge.redefine.adjaranet.R;
 @SuppressWarnings("unused")
 public class VideoControlsMobile extends VideoControls {
     protected SeekBar seekBar;
+    protected LinearLayout extraViewsContainer;
     protected ImageButton settingsButton;
     protected ImageButton fullscreenToggle;
-    protected Window activityWindow;
-
     protected OnFullscreenClickListener fullscreenClickListener;
 
     protected boolean userInteracting = false;
@@ -60,28 +62,16 @@ public class VideoControlsMobile extends VideoControls {
         return R.layout.exomedia_controls_custom;
     }
 
-    /**
-     * Sets the current video position, updating the seek bar
-     * and the current time field
-     *
-     * @param position The position in milliseconds
-     */
     @Override
     public void setPosition(@IntRange(from = 0) long position) {
-        currentTime.setText(TimeFormatUtil.formatMs(position));
+        currentTimeTextView.setText(TimeFormatUtil.formatMs(position));
         seekBar.setProgress((int) position);
     }
 
-    /**
-     * Sets the video duration in Milliseconds to display
-     * at the end of the progress bar
-     *
-     * @param duration The duration of the video in milliseconds
-     */
     @Override
     public void setDuration(@IntRange(from = 0) long duration) {
         if (duration != seekBar.getMax()) {
-            endTime.setText(TimeFormatUtil.formatMs(duration));
+            endTimeTextView.setText(TimeFormatUtil.formatMs(duration));
             seekBar.setMax((int) duration);
         }
     }
@@ -89,27 +79,21 @@ public class VideoControlsMobile extends VideoControls {
     @Override
     public void updateProgress(@IntRange(from = 0) long position, @IntRange(from = 0) long duration, @IntRange(from = 0, to = 100) int bufferPercent) {
         if (!userInteracting) {
-            seekBar.setSecondaryProgress((int) (seekBar.getMax() * ((float) bufferPercent / 100)));
+            seekBar.setSecondaryProgress((int) (seekBar.getMax() * ((float)bufferPercent / 100)));
             seekBar.setProgress((int) position);
-            currentTime.setText(TimeFormatUtil.formatMs(position));
+            currentTimeTextView.setText(TimeFormatUtil.formatMs(position));
         }
     }
 
-    /**
-     * Retrieves the view references from the xml layout
-     */
     @Override
     protected void retrieveViews() {
         super.retrieveViews();
-        seekBar = (SeekBar) findViewById(R.id.exomedia_controls_video_seek);
-        settingsButton = (ImageButton) findViewById(R.id.exomedia_controls_settings);
-        fullscreenToggle = (ImageButton) findViewById(R.id.exomedia_controls_fullscreen);
+        seekBar = findViewById(R.id.exomedia_controls_video_seek);
+        extraViewsContainer = findViewById(R.id.exomedia_controls_extra_container);
+        settingsButton = findViewById(R.id.exomedia_controls_settings);
+        fullscreenToggle = findViewById(R.id.exomedia_controls_fullscreen);
     }
 
-    /**
-     * Registers any internal listeners to perform the playback controls,
-     * such as play/pause, next, and previous
-     */
     @Override
     protected void registerListeners() {
         super.registerListeners();
@@ -159,17 +143,38 @@ public class VideoControlsMobile extends VideoControls {
         });
     }
 
-    /**
-     * After the specified delay the view will be hidden.  If the user is interacting
-     * with the controls then we wait until after they are done to start the delay.
-     *
-     * @param delay The delay in milliseconds to wait to start the hide animation
-     */
+    @Override
+    public void addExtraView(@NonNull View view) {
+        extraViewsContainer.addView(view);
+    }
+
+    @Override
+    public void removeExtraView(@NonNull View view) {
+        extraViewsContainer.removeView(view);
+    }
+
+    @NonNull
+    @Override
+    public List<View> getExtraViews() {
+        int childCount = extraViewsContainer.getChildCount();
+        if (childCount <= 0) {
+            return super.getExtraViews();
+        }
+
+        //Retrieves the layouts children
+        List<View> children = new LinkedList<>();
+        for (int i = 0; i < childCount; i++) {
+            children.add(extraViewsContainer.getChildAt(i));
+        }
+
+        return children;
+    }
+
     @Override
     public void hideDelayed(long delay) {
         hideDelay = delay;
 
-        if (delay < 0 || !canViewHide) {
+        if (delay < 0 || !canViewHide || isLoading) {
             return;
         }
 
@@ -190,16 +195,69 @@ public class VideoControlsMobile extends VideoControls {
             return;
         }
 
-        controlsContainer.startAnimation(new BottomViewHideShowAnimation(controlsContainer, toVisible, CONTROL_VISIBILITY_ANIMATION_LENGTH));
+        if (!hideEmptyTextContainer || !isTextContainerEmpty()) {
+            textContainer.startAnimation(new TopViewHideShowAnimation(textContainer, toVisible, CONTROL_VISIBILITY_ANIMATION_LENGTH));
+        }
+
+        if (!isLoading) {
+            controlsContainer.startAnimation(new BottomViewHideShowAnimation(controlsContainer, toVisible, CONTROL_VISIBILITY_ANIMATION_LENGTH));
+        }
 
         isVisible = toVisible;
         onVisibilityChanged();
     }
 
     @Override
-    public void setLoading(boolean isLoading) {
-        loadingProgress.setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
-        controlsContainer.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+    protected void updateTextContainerVisibility() {
+        if (!isVisible) {
+            return;
+        }
+
+        boolean emptyText = isTextContainerEmpty();
+        if (hideEmptyTextContainer && emptyText && textContainer.getVisibility() == VISIBLE) {
+            textContainer.clearAnimation();
+            textContainer.startAnimation(new TopViewHideShowAnimation(textContainer, false, CONTROL_VISIBILITY_ANIMATION_LENGTH));
+        } else if ((!hideEmptyTextContainer || !emptyText) && textContainer.getVisibility() != VISIBLE) {
+            textContainer.clearAnimation();
+            textContainer.startAnimation(new TopViewHideShowAnimation(textContainer, true, CONTROL_VISIBILITY_ANIMATION_LENGTH));
+        }
+    }
+
+    @Override
+    public void showLoading(boolean initialLoad) {
+        if (isLoading) {
+            return;
+        }
+
+        isLoading = true;
+        loadingProgressBar.setVisibility(View.VISIBLE);
+
+        if (initialLoad) {
+            controlsContainer.setVisibility(View.GONE);
+        } else {
+            playPauseButton.setEnabled(false);
+            previousButton.setEnabled(false);
+            nextButton.setEnabled(false);
+        }
+
+        show();
+    }
+
+    @Override
+    public void finishLoading() {
+        if (!isLoading) {
+            return;
+        }
+
+        isLoading = false;
+        loadingProgressBar.setVisibility(View.GONE);
+        controlsContainer.setVisibility(View.VISIBLE);
+
+        playPauseButton.setEnabled(true);
+        previousButton.setEnabled(enabledViews.get(R.id.exomedia_controls_previous_btn, true));
+        nextButton.setEnabled(enabledViews.get(R.id.exomedia_controls_next_btn, true));
+
+        updatePlaybackState(videoView != null && videoView.isPlaying());
     }
 
     public void setFullscreenClickListener(OnFullscreenClickListener fullscreenClickListener) {
@@ -269,12 +327,11 @@ public class VideoControlsMobile extends VideoControls {
 
         return linearLayout;
     }
-
     /**
      * Listens to the seek bar change events and correctly handles the changes
      */
     protected class SeekBarChanged implements SeekBar.OnSeekBarChangeListener {
-        private int seekToTime;
+        private long seekToTime;
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -283,8 +340,8 @@ public class VideoControlsMobile extends VideoControls {
             }
 
             seekToTime = progress;
-            if (currentTime != null) {
-                currentTime.setText(TimeFormatUtil.formatMs(seekToTime));
+            if (currentTimeTextView != null) {
+                currentTimeTextView.setText(TimeFormatUtil.formatMs(seekToTime));
             }
         }
 

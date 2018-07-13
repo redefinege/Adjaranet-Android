@@ -31,7 +31,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.devbrackets.android.exomedia.ui.widget.VideoControls;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -70,7 +70,7 @@ public class MovieViewNormalActivity extends MovieViewActivity
         // Assign views
         mDrawerLayout = (DrawerLayout) findViewById(R.id.movieview_drawer);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.movieview_coordinator);
-        mVideoView = (EMVideoView) findViewById(R.id.movieview_video_view);
+        mVideoView = (VideoView) findViewById(R.id.movieview_video_view);
         mInfoContainerLayout = (ScrollView) findViewById(R.id.movieview_info_container);
 
         CustomNetworkImageView poster = (CustomNetworkImageView) findViewById(R.id.movieview_poster);
@@ -371,7 +371,7 @@ public class MovieViewNormalActivity extends MovieViewActivity
 
     /**
      * Listens to the system to determine when to show the default controls
-     * for the {@link EMVideoView}
+     * for the {@link VideoView}
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private class FullScreenListener implements View.OnSystemUiVisibilityChangeListener {

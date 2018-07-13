@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.devbrackets.android.exomedia.ui.widget.FitsSystemWindowRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,7 +15,9 @@
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/exomedia_controls_title"
@@ -43,70 +46,62 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/exomedia_controls_settings_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="44dp"
-        android:layout_marginRight="44dp"
-        android:background="@drawable/exomedia_default_controls_interactive_background"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/exomedia_controls_interactive_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:background="@drawable/exomedia_default_controls_interactive_background"
         android:orientation="vertical"
         android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/exomedia_controls_current_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:textColor="@android:color/white"
+                android:typeface="monospace"
                 tools:ignore="RtlHardcoded"
-                tools:text="00:00" />
+                tools:text="1:06:29" />
 
             <SeekBar
                 android:id="@+id/exomedia_controls_video_seek"
                 style="?android:seekBarStyle"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/exomedia_controls_end_time"
-                android:layout_toRightOf="@+id/exomedia_controls_current_time" />
+                android:layout_weight="1"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/exomedia_controls_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/exomedia_controls_extra_container"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:textColor="@android:color/white"
-                tools:text="99:99" />
+                android:typeface="monospace"
+                tools:ignore="RtlHardcoded"
+                tools:text="1:23:49" />
 
             <LinearLayout
                 android:id="@+id/exomedia_controls_extra_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:orientation="horizontal"
-                tools:ignore="UselessLeaf" />
-        </RelativeLayout>
+                tools:ignore="RtlHardcoded,UselessLeaf" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -116,8 +111,8 @@
                 android:id="@+id/exomedia_controls_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_marginLeft="@dimen/exomedia_min_button_height"
                 android:background="@android:color/transparent"
                 android:minHeight="@dimen/exomedia_min_button_height"
@@ -129,7 +124,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:gravity="center"
@@ -143,8 +137,8 @@
                     android:background="@android:color/transparent"
                     android:minHeight="@dimen/exomedia_min_button_height"
                     android:minWidth="@dimen/exomedia_min_button_height"
-                    android:src="@drawable/exomedia_ic_skip_previous_white"
                     android:visibility="gone"
+                    app:srcCompat="@drawable/exomedia_ic_skip_previous_white"
                     tools:ignore="ContentDescription,RtlHardcoded"
                     tools:visibility="visible" />
 
@@ -155,7 +149,7 @@
                     android:background="@android:color/transparent"
                     android:minHeight="@dimen/exomedia_min_button_height"
                     android:minWidth="@dimen/exomedia_min_button_height"
-                    android:src="@drawable/exomedia_ic_play_arrow_white"
+                    app:srcCompat="@drawable/exomedia_ic_play_arrow_white"
                     tools:ignore="ContentDescription" />
 
                 <ImageButton
@@ -166,11 +160,10 @@
                     android:background="@android:color/transparent"
                     android:minHeight="@dimen/exomedia_min_button_height"
                     android:minWidth="@dimen/exomedia_min_button_height"
-                    android:src="@drawable/exomedia_ic_skip_next_white"
                     android:visibility="gone"
+                    app:srcCompat="@drawable/exomedia_ic_skip_next_white"
                     tools:ignore="ContentDescription,RtlHardcoded"
                     tools:visibility="visible" />
-
             </LinearLayout>
 
             <ImageButton
@@ -193,8 +186,9 @@
 
     <ProgressBar
         android:id="@+id/exomedia_controls_video_loading"
-        style="?android:progressBarStyle"
+        style="?android:progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </com.devbrackets.android.exomedia.ui.widget.FitsSystemWindowRelativeLayout>
