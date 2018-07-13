@@ -119,7 +119,7 @@ public abstract class MovieViewActivity extends AppCompatActivity implements OnP
         mVideoView.setOnErrorListener(new OnErrorListener() {
             @Override
             public boolean onError(Exception e) {
-                mVideoControls.setLoading(false);
+                mVideoControls.showLoading(false);
                 mVideoView.showControls();
                 return true;
             }
