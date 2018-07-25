@@ -1,12 +1,10 @@
+.DS_Store
+local.properties
 *.iml
 *.jks
 *.apk
 .gradle
-/local.properties
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/caches
-.DS_Store
+.idea
 /build
 /captures
+
