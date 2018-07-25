@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
+import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
 import org.parceler.Parcels;
@@ -113,7 +114,7 @@ public abstract class MovieViewActivity extends AppCompatActivity implements OnP
             }
         });
 
-        mVideoView.setControls(mVideoControls);
+        mVideoView.setControls((VideoControlsCore) mVideoControls);
         mVideoView.setOnPreparedListener(this);
         mVideoView.setBackgroundColor(Color.BLACK);
         mVideoView.setOnErrorListener(new OnErrorListener() {
