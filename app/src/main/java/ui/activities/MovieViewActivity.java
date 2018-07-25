@@ -128,7 +128,7 @@ public abstract class MovieViewActivity extends AppCompatActivity implements OnP
 
     protected void preparePlayback() {
         mVideoControls.setSettings(activeMovie.getLanguagesAsList(), activeMovie.getQualitiesAsList());
-        updatePlayback();
+        updatePlayback(false);
 
         AdjaranetAPI.getInstance()
                 .getMovieThumbnailBitmap(activeMovie, new ImageLoader.ImageListener() {
