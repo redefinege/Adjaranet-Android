@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,11 +26,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.devbrackets.android.exomedia.ui.widget.VideoControls;
@@ -44,6 +45,7 @@ import helpers.PreferencesManager;
 import helpers.ResourcesProvider;
 import model.EpisodeList;
 import model.Movie;
+import network.VolleySingleton;
 import ui.adapters.EpisodeItemsAdapter;
 import ui.adapters.MovieItemsAdapter;
 import ui.adapters.OnEpisodeClickListener;
@@ -51,11 +53,18 @@ import ui.adapters.OnMovieInteractionListener;
 import ui.helpers.CustomNetworkImageView;
 import ui.helpers.LoadingLayout;
 
+class MovieInfoLayoutContainer {
+    CustomNetworkImageView poster;
+    TextView title;
+    TextView info;
+    TextView views;
+    TextView description;
+}
+
 public class MovieViewNormalActivity extends MovieViewActivity
         implements OnEpisodeClickListener {
     private DrawerLayout mDrawerLayout;
     private CoordinatorLayout mCoordinatorLayout;
-    private ScrollView mInfoContainerLayout;
     private MovieItemsAdapter mRelatedAdapter;
     private LoadingLayout mLoadingLayout;
     private MaterialBetterSpinner mSeasonSpinner;
@@ -63,29 +72,29 @@ public class MovieViewNormalActivity extends MovieViewActivity
     private RecyclerView mEpisodeList;
     private EpisodeItemsAdapter mEpisodeItemsAdapter;
     private Integer mSelectedSeason = 1;
+    private MovieInfoLayoutContainer mInfoContainer = new MovieInfoLayoutContainer();
 
     protected void init() {
         setContentView(R.layout.activity_movie_view);
 
         // Assign views
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.movieview_drawer);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.movieview_coordinator);
-        mVideoView = (VideoView) findViewById(R.id.movieview_video_view);
-        mInfoContainerLayout = (ScrollView) findViewById(R.id.movieview_info_container);
+        mDrawerLayout = findViewById(R.id.movieview_drawer);
+        mCoordinatorLayout = findViewById(R.id.movieview_coordinator);
+        mVideoView = findViewById(R.id.movieview_video_view);
 
-        CustomNetworkImageView poster = (CustomNetworkImageView) findViewById(R.id.movieview_poster);
-        TextView title = (TextView) findViewById(R.id.movieview_title);
-        TextView info = (TextView) findViewById(R.id.movieview_info);
-        TextView views = (TextView) findViewById(R.id.movieview_views);
-        TextView description = (TextView) findViewById(R.id.movieview_description);
-        TextView relatedTitle = (TextView) findViewById(R.id.section_title);
-        Button downloadButton = (Button) findViewById(R.id.movieview_download);
-        Button openButton = (Button) findViewById(R.id.movieview_open_player);
-        RecyclerView relatedList = (RecyclerView) findViewById(R.id.section_recycler_view);
-        RelativeLayout loadingContainer = (RelativeLayout) findViewById(R.id.movieview_loading);
+        mInfoContainer.poster = findViewById(R.id.movieview_poster);
+        mInfoContainer.title = findViewById(R.id.movieview_title);
+        mInfoContainer.info = findViewById(R.id.movieview_info);
+        mInfoContainer.views = findViewById(R.id.movieview_views);
+        mInfoContainer.description = findViewById(R.id.movieview_description);
+        TextView relatedTitle = findViewById(R.id.section_title);
+        Button downloadButton = findViewById(R.id.movieview_download);
+        Button openButton = findViewById(R.id.movieview_open_player);
+        RecyclerView relatedList = findViewById(R.id.section_recycler_view);
+        RelativeLayout loadingContainer = findViewById(R.id.movieview_loading);
 
-        mSeasonSpinner = (MaterialBetterSpinner) findViewById(R.id.movieview_season_select);
-        mEpisodeList = (RecyclerView) findViewById(R.id.movieview_episode_list);
+        mSeasonSpinner = findViewById(R.id.movieview_season_select);
+        mEpisodeList = findViewById(R.id.movieview_episode_list);
         configureSeriesDrawer();
 
         // Handle button clicks
@@ -126,13 +135,8 @@ public class MovieViewNormalActivity extends MovieViewActivity
         });
 
         // Set movie info
-        poster.setLocalImageBitmap(posterImage);
-        title.setText(activeMovie.getFullTitle());
-        info.setText(String.format(getResources().getString(R.string.movieInfo),
-                activeMovie.getReleaseYear(), activeMovie.getDuration()));
-        views.setText(String.format(getResources().getString(R.string.viewCount),
-                activeMovie.getViewCount()));
-        description.setText(activeMovie.getDescription());
+        this.updateMovieInfo();
+        this.updateMoviePoster(posterImage);
 
         // Build related movies
         relatedTitle.setText(getResources().getString(R.string.related));
@@ -146,6 +150,9 @@ public class MovieViewNormalActivity extends MovieViewActivity
                     @Override
                     public void onResponse(String response) {
                         activeMovie = model;
+
+                        updateMoviePoster();
+                        updateMovieInfo();
                         preparePlayback();
                         updateRelatedMovies();
                     }
@@ -165,9 +172,8 @@ public class MovieViewNormalActivity extends MovieViewActivity
         });
         relatedList.setAdapter(mRelatedAdapter);
 
-        updateRelatedMovies();
-
-        openDrawerIfRequired();
+        this.updateRelatedMovies();
+        this.openDrawerIfRequired();
     }
 
     @Override
@@ -181,6 +187,25 @@ public class MovieViewNormalActivity extends MovieViewActivity
 
         mVideoControls.setVisibilityListener(new ControlsVisibilityListener());
         adjustVideoViewSize();
+    }
+
+    private void updateMovieInfo() {
+        mInfoContainer.title.setText(activeMovie.getFullTitle());
+        mInfoContainer.info.setText(String.format(getResources().getString(R.string.movieInfo),
+                activeMovie.getReleaseYear(), activeMovie.getDuration()));
+        mInfoContainer.views.setText(String.format(getResources().getString(R.string.viewCount),
+                activeMovie.getViewCount()));
+        mInfoContainer.description.setText(activeMovie.getDescription());
+    }
+
+    private void updateMoviePoster() {
+        ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
+
+        mInfoContainer.poster.setImageUrl(activeMovie.getPoster(), imageLoader);
+    }
+
+    private void updateMoviePoster(Bitmap posterImageBitmap) {
+        mInfoContainer.poster.setLocalImageBitmap(posterImageBitmap);
     }
 
     private void configureSeriesDrawer() {
