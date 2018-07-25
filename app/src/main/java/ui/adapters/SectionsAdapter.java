@@ -1,5 +1,6 @@
 package ui.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,8 +11,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Movie;
 import ge.redefine.adjaranet.R;
+import model.Movie;
+
+class CustomLinearLayoutManager extends LinearLayoutManager {
+    CustomLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+        super(context, orientation, reverseLayout);
+    }
+
+    @Override
+    public boolean isAutoMeasureEnabled() {
+        return true;
+    }
+}
 
 public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.SectionVH> {
     private List<List<Movie>> mChildDataset = new ArrayList<>();
@@ -78,13 +90,12 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Sectio
         public SectionVH(View itemView) {
             super(itemView);
 
-            mHeaderText = (TextView) itemView.findViewById(R.id.section_title);
-            mRecyclerView = (RecyclerView) itemView.findViewById(R.id.section_recycler_view);
+            mHeaderText = itemView.findViewById(R.id.section_title);
+            mRecyclerView = itemView.findViewById(R.id.section_recycler_view);
 
             // setup layout manager
-            mLayoutManager = new LinearLayoutManager(itemView.getContext(),
+            mLayoutManager = new CustomLinearLayoutManager(itemView.getContext(),
                     LinearLayoutManager.HORIZONTAL, false);
-            mLayoutManager.setAutoMeasureEnabled(true);
 
             // setup adapter
             mItemsAdapter = new MovieItemsAdapter(mListener);
@@ -93,6 +104,5 @@ public class SectionsAdapter extends RecyclerView.Adapter<SectionsAdapter.Sectio
             mRecyclerView.setAdapter(mItemsAdapter);
         }
     }
-
 
 }
