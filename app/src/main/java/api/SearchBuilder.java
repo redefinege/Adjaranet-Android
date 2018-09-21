@@ -24,6 +24,10 @@ public abstract class SearchBuilder {
         return ajax;
     }
 
+    public String getEpisode() {
+        return episode;
+    }
+
     public void setEpisode(String episode) {
         this.episode = episode;
     }
@@ -153,19 +157,19 @@ public abstract class SearchBuilder {
 
     public String getUrl() {
         return searchUrl
-                + "?ajax=" + ajax
-                + "&display=" + display
-                + "&startYear=" + startYear
-                + "&endYear=" + endYear
-                + "&offset=" + offset
-                + "&isnew=" + isnew
-                + "&needtags=" + needtags
-                + "&orderBy=" + orderBy
-                + "&order[order]=" + orderOrder
-                + "&order[data]=" + orderData
-                + "&language=" + language
-                + "&country=" + country
-                + "&keyword=" + keyword
-                + "&episode=" + episode;
+                + "?ajax=" + getAjax()
+                + "&display=" + getDisplay()
+                + "&startYear=" + getStartYear()
+                + "&endYear=" + getEndYear()
+                + "&offset=" + getOffset()
+                + "&isnew=" + getIsnew()
+                + "&needtags=" + getNeedtags()
+                + "&orderBy=" + getOrderBy()
+                + "&order[order]=" + getOrderOrder()
+                + "&order[data]=" + getOrderData()
+                + "&language=" + getLanguage()
+                + "&country=" + getCountry()
+                + "&keyword=" + getKeyword()
+                + "&episode=" + getEpisode();
     }
 }
