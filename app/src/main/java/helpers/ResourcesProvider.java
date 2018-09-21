@@ -13,9 +13,6 @@ import ge.redefine.adjaranet.R;
 public class ResourcesProvider {
     private static Context sContext;
 
-    private ResourcesProvider() {
-    }
-
     public static void init(Context context) {
         sContext = context;
     }
@@ -46,13 +43,16 @@ public class ResourcesProvider {
 
     public static List<String> getYearsList() {
         final List<String> yearsList = new ArrayList<>();
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        for (int i = 1900; i <= currentYear; i++) {
+        for (int i = 1900; i <= getCurrentYear(); i++) {
             yearsList.add(String.valueOf(i));
         }
 
         return yearsList;
+    }
+
+    public static int getCurrentYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
     }
 
     public static List<String> getSectionHeaderList() {

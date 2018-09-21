@@ -1,5 +1,7 @@
 package api;
 
+import helpers.ResourcesProvider;
+
 @SuppressWarnings("unused")
 public abstract class SearchBuilder {
     private String searchUrl = "";
@@ -8,7 +10,7 @@ public abstract class SearchBuilder {
     private int offset = 0;
     private String ajax = "1";
     private String startYear = "1900";
-    private String endYear = "2016";
+    private String endYear = null;
     private String isnew = "0";
     private String needtags = "0";
     private String orderBy = "date";
@@ -35,7 +37,11 @@ public abstract class SearchBuilder {
     }
 
     public String getEndYear() {
-        return endYear;
+        if (endYear == null) {
+            return String.valueOf(ResourcesProvider.getCurrentYear());
+        } else {
+            return endYear;
+        }
     }
 
     public int getOffset() {
