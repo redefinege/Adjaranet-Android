@@ -21,7 +21,9 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
@@ -98,6 +100,8 @@ public class AdjaranetAPI {
                                          final Response.ErrorListener errorListener) {
         final CountDownLatch lLatch = new CountDownLatch(2);
         final List<Movie> lResponse = new ArrayList<>();
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Referer", "http://net.adjara.com/Search");
 
         final Response.Listener<List<Movie>> lMovieListener = new Response.Listener<List<Movie>>() {
             @Override
@@ -131,11 +135,13 @@ public class AdjaranetAPI {
             public void run() {
                 searchBuilder.setEpisode("1");
                 sendMovieRequest(searchBuilder.getUrl(),
+                        headers,
                         lSeriesListener,
                         lErrorListener
                 );
                 searchBuilder.setEpisode("0");
                 sendMovieRequest(searchBuilder.getUrl(),
+                        headers,
                         lMovieListener,
                         lErrorListener
                 );
@@ -360,6 +366,7 @@ public class AdjaranetAPI {
         }.getType();
         GsonRequest<Series> request = new GsonRequest<>(
                 URL_SERIES_INFO.replace("{id}", id),
+                null,
                 type,
                 getSeriesGson(type),
                 listener,
@@ -371,15 +378,24 @@ public class AdjaranetAPI {
         return request;
     }
 
+    private synchronized GsonRequest sendMovieRequest(String url,
+                                                      Response.Listener<List<Movie>> listener,
+                                                      Response.ErrorListener errorListener) {
+        return sendMovieRequest(url, null, listener, errorListener);
+    }
+
     /**
      * Send and deserialize request, which expects Movie list to be returned
      */
-    private synchronized GsonRequest sendMovieRequest(String url, Response.Listener<List<Movie>> listener,
+    private synchronized GsonRequest sendMovieRequest(String url,
+                                                      Map<String, String> headers,
+                                                      Response.Listener<List<Movie>> listener,
                                                       Response.ErrorListener errorListener) {
         Type type = new TypeToken<List<Movie>>() {
         }.getType();
         GsonRequest<List<Movie>> request = new GsonRequest<>(
                 url,
+                headers,
                 type,
                 getMovieGson(type),
                 listener,

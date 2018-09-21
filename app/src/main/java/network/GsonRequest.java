@@ -1,5 +1,6 @@
 package network;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -13,9 +14,11 @@ import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 public class GsonRequest<T> extends Request<T> {
     private Priority priority = Priority.NORMAL;
+    private final Map<String, String> headers;
     private final Type type;
     private final Gson gson;
     private final Response.Listener<T> listener;
@@ -28,14 +31,25 @@ public class GsonRequest<T> extends Request<T> {
      * @param gson  Gson object
      */
     public GsonRequest(String url,
+                       Map<String, String> headers,
                        Type type,
                        Gson gson,
                        Response.Listener<T> listener,
                        Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);
+        this.headers = headers;
         this.type = type;
         this.gson = gson;
         this.listener = listener;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        if (headers == null) {
+            return super.getHeaders();
+        } else {
+            return headers;
+        }
     }
 
     @Override
