@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -171,6 +172,17 @@ public class MainActivity extends AppCompatActivity implements OnMovieInteractio
         if (fragment != null) {
             ((FavoritesFragment) fragment).updateContent();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP ||
+                keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ||
+                keyCode == KeyEvent.KEYCODE_DPAD_DOWN ||
+                keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void startMovieActivity(Movie movie, ImageView imageView, Series extraSeries) {
